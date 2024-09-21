@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Send, ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { Coins } from "lucide-react";
+import CreateToken from './CreateToken'
 
 const tokens = [
   {
@@ -38,6 +39,7 @@ const tokens = [
 function TokenList() {
   const [sortColumn, setSortColumn] = useState("name");
   const [sortDirection, setSortDirection] = useState("asc");
+  const [isCreatePop , setIsCreatePop] = useState(false)
 
   const sortedTokens = [...tokens].sort((a, b) => {
     if (a[sortColumn] < b[sortColumn]) return sortDirection === "asc" ? -1 : 1;
@@ -58,7 +60,7 @@ function TokenList() {
     <div className="p-6 my-6 bg-lLight dark:bg-lBlack rounded-md flex flex-col space-y-6">
     <div className="flex justify-between items-center pb-6 pt-2">
       <h1 className="text-2xl font-light">Your Tokens</h1>
-      <button className="p-4 w-64 scale-75 rounded-lg bg-black hover:bg-white hover:text-black hover:scale-90 transition-all delay-75 dark:hover:text-white dark:hover:bg-black   dark:bg-slate-200 text-white dark:text-black  text-md space-x-2 inline-flex justify-center">
+      <button onClick={()=>setIsCreatePop(true)} className="p-4 w-64 scale-75 rounded-lg bg-black hover:bg-white hover:text-black hover:scale-90 transition-all delay-75 dark:hover:text-white dark:hover:bg-black   dark:bg-slate-200 text-white dark:text-black  text-md space-x-2 inline-flex justify-center">
         <Coins className="h-5 w-5" />
         Create Solana Token
       </button>
@@ -132,6 +134,9 @@ function TokenList() {
           </tbody>
         </table>
       </div>
+      {isCreatePop && (
+        <CreateToken onClose={()=>setIsCreatePop(false)}/>
+      )}
     </div>
   );
 }
