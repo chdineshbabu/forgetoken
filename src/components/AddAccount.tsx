@@ -1,11 +1,11 @@
 'use client'
-// AddAccount.js
+
 import { useState } from 'react'
 import { WalletIcon, UploadIcon } from 'lucide-react'
 import ImportWallet from './ImportWallet'
 
-function AddAccount() {
-  const [isImportModalOpen, setImportModalOpen] = useState(false)
+const AddAccount: React.FC = () => {
+  const [isImportModalOpen, setImportModalOpen] = useState<boolean>(false)
 
   return (
     <div className='p-12 my-12 bg-lLight dark:bg-lBlack rounded-md items-center flex flex-col text-center'>

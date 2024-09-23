@@ -3,9 +3,17 @@ import React, { useState } from "react";
 import { Send, ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { Coins } from "lucide-react";
-import CreateToken from './CreateToken'
+import CreateToken from './CreateToken';
 
-const tokens = [
+interface Token {
+  id: number;
+  name: string;
+  symbol: string;
+  balance: number;
+  logo: string;
+}
+
+const tokens: Token[] = [
   {
     id: 1,
     name: "Solana",
@@ -36,10 +44,10 @@ const tokens = [
   },
 ];
 
-function TokenList() {
-  const [sortColumn, setSortColumn] = useState("name");
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [isCreatePop , setIsCreatePop] = useState(false)
+const TokenList: React.FC = () => {
+  const [sortColumn, setSortColumn] = useState<keyof Token>("name");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [isCreatePop, setIsCreatePop] = useState<boolean>(false);
 
   const sortedTokens = [...tokens].sort((a, b) => {
     if (a[sortColumn] < b[sortColumn]) return sortDirection === "asc" ? -1 : 1;
@@ -47,7 +55,7 @@ function TokenList() {
     return 0;
   });
 
-  const handleSort = (column) => {
+  const handleSort = (column: keyof Token) => {
     if (column === sortColumn) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
@@ -58,13 +66,17 @@ function TokenList() {
 
   return (
     <div className="p-6 my-6 bg-lLight dark:bg-lBlack rounded-md flex flex-col space-y-6">
-    <div className="flex justify-between items-center pb-6 pt-2">
-      <h1 className="text-2xl font-light">Your Tokens</h1>
-      <button onClick={()=>setIsCreatePop(true)} className="p-4 w-64 scale-75 rounded-lg bg-black hover:bg-white hover:text-black hover:scale-90 transition-all delay-75 dark:hover:text-white dark:hover:bg-black   dark:bg-slate-200 text-white dark:text-black  text-md space-x-2 inline-flex justify-center">
-        <Coins className="h-5 w-5" />
-        Create Solana Token
-      </button>
-      </div><div className="overflow-x-auto">
+      <div className="flex justify-between items-center pb-6 pt-2">
+        <h1 className="text-2xl font-light">Your Tokens</h1>
+        <button
+          onClick={() => setIsCreatePop(true)}
+          className="p-4 w-64 scale-75 rounded-lg bg-black hover:bg-white hover:text-black hover:scale-90 transition-all delay-75 dark:hover:text-white dark:hover:bg-black dark:bg-slate-200 text-white dark:text-black text-md space-x-2 inline-flex justify-center"
+        >
+          <Coins className="h-5 w-5" />
+          Create Solana Token
+        </button>
+      </div>
+      <div className="overflow-x-auto">
         <table className="min-w-full bg-lLight dark:bg-lBlack">
           <thead>
             <tr className="w-full text-left">
@@ -124,7 +136,7 @@ function TokenList() {
                 <td className="py-2 px-4">{token.symbol}</td>
                 <td className="py-2 px-4">{token.balance.toLocaleString()}</td>
                 <td className="py-2 px-4 text-right">
-                  <button className="px-3 py-2 inline-flex items-center rounded-lg bg-black hover:bg-white hover:text-black hover:scale-105 transition-all delay-75 dark:hover:text-white dark:hover:bg-black   dark:bg-slate-200 text-white dark:text-black text-sm justify-center">
+                  <button className="px-3 py-2 inline-flex items-center rounded-lg bg-black hover:bg-white hover:text-black hover:scale-105 transition-all delay-75 dark:hover:text-white dark:hover:bg-black dark:bg-slate-200 text-white dark:text-black text-sm justify-center">
                     <Send className="mr-2 h-4 w-4" />
                     Send
                   </button>
@@ -135,10 +147,10 @@ function TokenList() {
         </table>
       </div>
       {isCreatePop && (
-        <CreateToken onClose={()=>setIsCreatePop(false)}/>
+        <CreateToken onClose={() => setIsCreatePop(false)} />
       )}
     </div>
   );
-}
+};
 
 export default TokenList;

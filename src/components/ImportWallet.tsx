@@ -1,38 +1,43 @@
-// ImportWalletModal.js
-import { useState } from 'react'
-import { Clipboard, ArrowRight, AlertCircle, X } from 'lucide-react'
+// ImportWalletModal.tsx
+import { useState } from 'react';
+import { Clipboard, ArrowRight, AlertCircle, X } from 'lucide-react';
 
-export default function ImportWallet({ onClose }) {
-  const [words, setWords] = useState(Array(12).fill(''))
-  const [error, setError] = useState('')
-  const [isMnemonicPasted, setIsMnemonicPasted] = useState(false)
-  const [mnemonic, setMnemonic] = useState()
+interface ImportWalletProps {
+  onClose: () => void;
+}
 
-  const triggerPasteAction = () => {
-    navigator.clipboard.readText().then((text) => {
-      const pastedWords = text.toLowerCase().trim().split(/\s+/)
+const ImportWallet: React.FC<ImportWalletProps> = ({ onClose }) => {
+  const [words, setWords] = useState<string[]>(Array(12).fill(''));
+  const [error, setError] = useState<string>('');
+  const [isMnemonicPasted, setIsMnemonicPasted] = useState<boolean>(false);
+  const [mnemonic, setMnemonic] = useState<string | undefined>();
+
+  const triggerPasteAction = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const pastedWords = text.toLowerCase().trim().split(/\s+/);
       if (pastedWords.length === 12) {
-        setWords(pastedWords)
-        setIsMnemonicPasted(true)
-        setError('')
+        setWords(pastedWords);
+        setIsMnemonicPasted(true);
+        setError('');
       } else {
-        setError('Please paste all 12 words of your mnemonic phrase.')
+        setError('Please paste all 12 words of your mnemonic phrase.');
       }
-    }).catch(() => {
-      setError('Failed to read clipboard. Please paste manually.')
-    })
-  }
+    } catch {
+      setError('Failed to read clipboard. Please paste manually.');
+    }
+  };
 
   const handleAddWallet = () => {
     if (words.some(word => !word)) {
-      setError('Please fill in all 12 words of your mnemonic phrase.')
-      return
+      setError('Please fill in all 12 words of your mnemonic phrase.');
+      return;
     }
-    const string = words.join(' ')
-    setMnemonic(string)
-    console.log(mnemonic)
-    onClose() 
-  }
+    const string = words.join(' ');
+    setMnemonic(string);
+    console.log(string); // Log the mnemonic string instead of the state variable
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
@@ -94,5 +99,7 @@ export default function ImportWallet({ onClose }) {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default ImportWallet;

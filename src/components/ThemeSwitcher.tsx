@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-const ThemeSwitch = () => {
+const ThemeSwitch: React.FC = () => {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [isDark, setIsDark] = useState<boolean>(false);
 
   useEffect(() => {
-setMounted(true);
-    setIsDark(theme === "dark"); 
+    setMounted(true);
+    setIsDark(theme === "dark");
   }, [theme]);
 
   if (!mounted) return null;
@@ -35,7 +35,6 @@ setMounted(true);
           }`}
         ></div>
       </div>
-      
     </div>
   );
 };
